@@ -35,14 +35,16 @@ def match_datasize(data1,data2):
 # ファイル書き込みに関する関数
 def make_file(type='csv'):
     base_filename = f'check.{type}'
-    name, ext = os.path.splitext(base_filename)
-    filename = base_filename
+    relative_path = f"../出力結果/{base_filename}"
+    name, ext = os.path.splitext(relative_path)
+    filename = relative_path
     counter = 1
     # ファイル名の重複を避けるために、カウンターを作成
     while os.path.exists(filename):
         filename = f"{name}_{counter}{ext}"
         counter += 1
-    return filename
+    base = filename = os.path.basename(filename)
+    return filename,base
 
 
 # 差分を取得し格納する関数
@@ -64,16 +66,18 @@ def get_diff(data1,data2,file_type='csv'):
                 
     # ファイルの書き込み処理
     if file_type == 'csv':
-        filename = make_file('csv')
-        diff_data.to_csv(filename, index=False)
-        print(f'{filename}として出力')
+        filename,base_filename = make_file('csv')
+        relative_path = f"../出力結果/{filename}"
+        diff_data.to_csv(relative_path, index=False)
+        print(f'{base_filename}として出力')
     elif file_type == 'txt':
-        filename = make_file('txt')
-        with open(filename, "w") as file:
+        filename,base_filename = make_file('txt')
+        relative_path = f"../出力結果/{filename}"
+        with open(relative_path, "w") as file:
             for _, col in diff_data.iterrows():
                 file.write(
                     f"行:{col['行']},列:{col['列']},変更前:{col['変更前']},変更後:{col['変更後']} \n")
-        print(f'{filename}として出力')
+        print(f'{base_filename}として出力')
 
 
 # 実行関数
