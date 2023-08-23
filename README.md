@@ -1,0 +1,2 @@
+# excel_diff_manege
+エクセルのgit管理における問題に対する実装
